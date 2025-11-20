@@ -1,0 +1,352 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>LPH Password Manager</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui;
+      margin: 0;
+      padding: 20px;
+      width: 100%;
+      min-height: 100vh;
+      box-sizing: border-box;
+      background: #fff;
+      color: #333;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-section img {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+    }
+
+    .logo-section h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .status-section {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #dc3545;
+    }
+
+    .status-dot.unlocked {
+      background: #28a745;
+    }
+
+    .status-text {
+      font-size: 13px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      background: #fff;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: #f8f8f8;
+    }
+
+    .btn-primary {
+      background: #007AFF;
+      color: white;
+      border-color: #007AFF;
+    }
+
+    .btn-primary:hover {
+      background: #0051D5;
+    }
+
+    .btn-danger {
+      color: #dc3545;
+      border-color: #dc3545;
+    }
+
+    .btn-danger:hover {
+      background: #fff5f5;
+    }
+
+    .search-section {
+      margin: 16px 0;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #007AFF;
+    }
+
+    .locked-view {
+      text-align: center;
+      padding: 32px 16px;
+    }
+
+    .locked-view input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      margin: 16px 0;
+      box-sizing: border-box;
+    }
+
+    .locked-view button {
+      width: 100%;
+      padding: 12px;
+      background: #007AFF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .credentials-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .cred-card {
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      transition: all 0.2s;
+    }
+
+    .cred-card:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .cred-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .cred-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 18px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .cred-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cred-info {
+      flex: 1;
+    }
+
+    .cred-domain {
+      font-weight: 600;
+      font-size: 14px;
+      color: #000;
+      margin-bottom: 2px;
+    }
+
+    .cred-username {
+      font-size: 13px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .cred-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .cred-actions button {
+      flex: 1;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #007AFF;
+      background: #fff;
+      color: #007AFF;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .cred-actions button:hover {
+      background: #007AFF;
+      color: #fff;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 16px;
+      color: #999;
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 8px;
+      margin: 16px 0;
+    }
+
+    .quick-actions button {
+      flex: 1;
+      padding: 11px;
+      border-radius: 8px;
+      border: 2px solid #007AFF;
+      background: #fff;
+      color: #007AFF;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .quick-actions button:hover {
+      background: #007AFF;
+      color: white;
+    }
+
+    .footer {
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid #f0f0f0;
+      text-align: center;
+    }
+
+    .footer a {
+      color: #007AFF;
+      text-decoration: none;
+      font-size: 12px;
+      margin: 0 8px;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-section">
+      <img src="icons/logo.png" alt="LPH" id="logo">
+      <h1>LPH Manager</h1>
+    </div>
+    <div class="status-section">
+      <span class="status-dot" id="statusDot"></span>
+      <span class="status-text" id="statusText">Locked</span>
+    </div>
+  </div>
+
+  <div class="actions" id="headerActions" style="display: none;">
+    <button class="btn btn-danger" id="lockBtn">🔒 Lock</button>
+    <button class="btn btn-danger" id="signoutBtn">Sign Out</button>
+  </div>
+
+  <!-- Locked View -->
+  <div id="lockedView" style="display: none;">
+    <div class="locked-view">
+      <div style="font-size: 48px; margin-bottom: 16px;">🔐</div>
+      <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">Vault Locked</div>
+      <div style="font-size: 13px; color: #666; margin-bottom: 16px;">Enter your master password to unlock</div>
+      <input type="password" id="unlockInput" placeholder="Master password" autocomplete="current-password">
+      <button id="unlockBtn">Unlock Vault</button>
+    </div>
+  </div>
+
+  <!-- Unlocked View -->
+  <div id="unlockedView" style="display: none;">
+    <div class="search-section">
+      <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search passwords...">
+    </div>
+
+    <div class="quick-actions">
+      <button id="addPasswordBtn">➕ Add Password</button>
+      <button id="shareBtn" style="background: #ff9500; margin-left: 8px;">🔗 Share</button>
+    </div>
+    
+    <div class="quick-actions" style="margin-top: 8px;">
+      <button id="securityCheckBtn" style="background: #dc3545; color: white; border: none;">🔒 Check Account Security</button>
+    </div>
+
+    <div class="credentials-list" id="credentialsList">
+      <div class="empty-state">
+        <div class="empty-state-icon">🔐</div>
+        <div style="font-size: 14px; margin-bottom: 8px;">No passwords saved</div>
+        <div style="font-size: 12px; color: #999;">Save passwords as you log into websites</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <a href="#" id="optionsLink">⚙️ Settings</a>
+    <a href="#" id="helpLink">❓ Help</a>
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

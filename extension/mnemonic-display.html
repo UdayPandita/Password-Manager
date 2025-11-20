@@ -1,0 +1,220 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Save Your Recovery Phrase - LPH</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font: 14px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui;
+      margin: 0;
+      padding: 32px;
+      background: #f5f5f5;
+      min-width: 380px;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      font-size: 26px;
+      color: #333;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .warning {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 24px;
+      color: #856404;
+    }
+
+    .warning strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .phrase-container {
+      background: #f8f9fa;
+      border: 2px dashed #007AFF;
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+    }
+
+    .phrase-title {
+      text-align: center;
+      font-weight: 600;
+      color: #007AFF;
+      margin-bottom: 12px;
+      font-size: 15px;
+    }
+
+    .phrase-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .phrase-word {
+      background: #fff;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #dee2e6;
+      font-family: 'Courier New', monospace;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .phrase-word span {
+      display: block;
+      font-size: 11px;
+      color: #999;
+      margin-bottom: 4px;
+      font-weight: 400;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+      font-size: 15px;
+    }
+
+    .instructions {
+      background: #e7f3ff;
+      border-left: 4px solid #007AFF;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 24px 0;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .instructions ul {
+      margin: 8px 0 0 0;
+      padding-left: 20px;
+    }
+
+    .instructions li {
+      margin: 6px 0;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      background: #007AFF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 24px;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #0051D5;
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .back-btn {
+      background: #6c757d;
+      padding: 12px;
+      font-size: 14px;
+      margin-top: 16px;
+      margin-bottom: 8px;
+    }
+
+    .back-btn:hover {
+      background: #5a6268;
+    }
+
+    .copy-btn {
+      background: #6c757d;
+      padding: 10px 16px;
+      font-size: 14px;
+      margin-top: 12px;
+      width: auto;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 6px;
+    }
+
+    .copy-btn:hover {
+      background: #5a6268;
+    }
+
+    .footer-note {
+      margin-top: 16px;
+      text-align: center;
+      color: #666;
+      font-size: 13px;
+    }
+
+    @media (max-width: 500px) {
+      .phrase-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔑 Save Your Recovery Phrase</h1>
+    
+    <div class="warning">
+      <strong>⚠️ CRITICAL: Write this down NOW!</strong>
+      This 12-word phrase is the <b>only way</b> to recover your account if you forget your master password.
+      <br>Store it safely offline (never in a screenshot or digital file).
+    </div>
+    
+    <div class="phrase-container">
+      <div class="phrase-title">Your Recovery Phrase</div>
+      <div id="phraseGrid" class="phrase-grid">
+        <div class="loading">Generating secure phrase...</div>
+      </div>
+      <button id="copyBtn" class="copy-btn" style="display: none;">📋 Copy to Clipboard</button>
+    </div>
+    
+    <div class="instructions">
+      <strong>🧠 How to store your phrase safely:</strong>
+      <ul>
+        <li>Write it down on paper and keep it in a safe location</li>
+        <li>Never store it in screenshots, text files, or emails</li>
+        <li>Do not share it with anyone — even support teams</li>
+        <li>If lost, your account cannot be recovered</li>
+      </ul>
+    </div>
+    
+    <button id="backBtn" class="back-btn">← Back to Sign Up</button>
+    <button id="savedBtn" disabled>I have safely saved my recovery phrase</button>
+    
+    <div class="footer-note">
+      Next: You'll verify your phrase to confirm it’s saved correctly
+    </div>
+  </div>
+
+  <!-- JS Logic -->
+  <script type="module" src="mnemonic-display.js"></script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>LPH Browser</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body { 
+            margin: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #202124;
+            overflow: hidden;
+        }
+
+        #controls {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(180deg, #2d2d30 0%, #252526 100%);
+            padding: 8px 12px;
+            height: 50px;
+            width: 100vw;
+            box-sizing: border-box;
+            border-bottom: 1px solid #1a1a1b;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 4px;
+            margin-right: 12px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #3c3c3c 0%, #2d2d2d 100%);
+            border: none;
+            color: #e0e0e0;
+            font-size: 16px;
+            min-width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #505050 0%, #3c3c3c 100%);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #address-bar-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background: #3c3c3c;
+            border: 1px solid #505050;
+            border-radius: 20px;
+            padding: 0 16px;
+            margin: 0 12px;
+            transition: all 0.2s ease;
+        }
+
+        #address-bar-container:focus-within {
+            background: #454545;
+            border-color: #0078d4;
+            box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+        }
+
+        #address-bar {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            padding: 10px 0;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        #address-bar::placeholder {
+            color: #808080;
+        }
+
+        #go-btn {
+            background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
+            border: none;
+            padding: 0 20px;
+            font-weight: 600;
+            margin-left: 4px;
+            box-shadow: 0 2px 8px rgba(0, 120, 212, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        #go-btn:hover {
+            background: linear-gradient(135deg, #0086f0 0%, #0078d4 100%);
+            box-shadow: 0 4px 12px rgba(0, 120, 212, 0.5);
+            transform: translateY(-2px);
+        }
+
+        #go-btn:active {
+            background: linear-gradient(135deg, #005a9e 0%, #004578 100%);
+            box-shadow: 0 1px 4px rgba(0, 120, 212, 0.3);
+            transform: translateY(0);
+        }
+
+        #ext-btn {
+            background: linear-gradient(135deg, #5c2d91 0%, #441f6e 100%);
+            border: none;
+            padding: 0 18px;
+            font-weight: 600;
+            margin-left: 8px;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(92, 45, 145, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        #ext-btn:hover {
+            background: linear-gradient(135deg, #7239b3 0%, #5c2d91 100%);
+            box-shadow: 0 4px 12px rgba(92, 45, 145, 0.5);
+        }
+
+        #ext-btn:active {
+            background: linear-gradient(135deg, #441f6e 0%, #2d1247 100%);
+            box-shadow: 0 1px 4px rgba(92, 45, 145, 0.3);
+        }
+
+        #ext-btn::before {
+            content: '🔐';
+            margin-right: 6px;
+            font-size: 14px;
+        }
+
+        .browser-title {
+            color: #e0e0e0;
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 16px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .browser-title span {
+            color: #0078d4;
+        }
+
+        /* Loading indicator */
+        #loading-indicator {
+            position: absolute;
+            top: 50px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #0078d4;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        #loading-indicator.active {
+            animation: loading 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loading {
+            0% { transform: scaleX(0); transform-origin: left; }
+            50% { transform: scaleX(1); transform-origin: left; }
+            51% { transform: scaleX(1); transform-origin: right; }
+            100% { transform: scaleX(0); transform-origin: right; }
+        }
+
+        /* Tooltip styles */
+        button {
+            position: relative;
+        }
+
+        button[title]:not(#ext-btn):hover::after {
+            content: attr(title);
+            position: fixed;
+            bottom: auto;
+            top: 60px;
+            left: auto;
+            transform: translateX(-50%);
+            background: #1a1a1b;
+            color: #e0e0e0;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 10000;
+            pointer-events: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        button[title]:not(#ext-btn):hover::before {
+            content: '';
+            position: fixed;
+            bottom: auto;
+            top: 56px;
+            left: auto;
+            transform: translateX(-50%);
+            border: 4px solid transparent;
+            border-bottom-color: #1a1a1b;
+            z-index: 10001;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+<div id="controls">
+    <div class="browser-title">LPH <span>Browser</span></div>
+    <div class="nav-buttons">
+        <button id="back-btn" title="Go back">←</button>
+        <button id="fwd-btn" title="Go forward">→</button>
+        <button id="reload-btn" title="Reload page">⟳</button>
+    </div>
+    <div id="address-bar-container">
+        <input type="text" id="address-bar" placeholder="Search or enter website..." value="" />
+    </div>
+    <button id="go-btn">Go</button>
+    <button id="ext-btn" title="Password Manager">LPH</button>
+</div>
+<div id="loading-indicator"></div>
+
+<script src="./renderer.js" defer></script>
+</body>
+</html>

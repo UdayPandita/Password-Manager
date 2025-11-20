@@ -1,0 +1,212 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Settings - LPH Password Manager</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font: 14px/1.6 -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, system-ui;
+      margin: 0;
+      padding: 32px;
+      background: #f5f5f5;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 28px;
+      margin: 0 0 32px 0;
+      color: #333;
+    }
+    .card {
+      background: #fff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .card h2 {
+      margin: 0 0 8px 0;
+      font-size: 20px;
+      color: #333;
+    }
+    .card p {
+      margin: 0 0 16px 0;
+      color: #666;
+      font-size: 14px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    input:focus {
+      outline: none;
+      border-color: #007AFF;
+    }
+    button {
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: #007AFF;
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #0051D5;
+    }
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+    .btn-danger:hover {
+      background: #c82333;
+    }
+    .message {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .danger-zone {
+      border: 2px solid #dc3545;
+    }
+    .info-box {
+      background: #e7f3ff;
+      border-left: 4px solid #007AFF;
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 16px;
+      font-size: 14px;
+    }
+    .breach-item {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+    .breach-item.safe {
+      border-left: 4px solid #28a745;
+      background: #f0f9f4;
+    }
+    .breach-item.warning {
+      border-left: 4px solid #ffc107;
+      background: #fff9e6;
+    }
+    .breach-item.danger {
+      border-left: 4px solid #dc3545;
+      background: #fff5f5;
+    }
+    .breach-email {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .breach-count {
+      font-size: 13px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 32px;">
+      <button id="backBtn" style="padding: 8px 16px; background: #007AFF; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">← Back</button>
+      <h1 style="margin: 0;">⚙️ Settings</h1>
+    </div>
+    
+    <div class="card">
+      <h2>Account Information</h2>
+      <p id="userEmail">Loading...</p>
+    </div>
+    
+    <div class="card">
+      <h2>Change Master Password</h2>
+      <p>Update your master password. You'll need to unlock your vault again after changing it.</p>
+      
+      <div class="form-group">
+        <label for="currentPassword">Current Master Password</label>
+        <input type="password" id="currentPassword" placeholder="Enter current password">
+      </div>
+      
+      <div class="form-group">
+        <label for="newPassword">New Master Password (min 8 characters)</label>
+        <input type="password" id="newPassword" minlength="8" placeholder="Enter new password">
+      </div>
+      
+      <div class="form-group">
+        <label for="confirmPassword">Confirm New Password</label>
+        <input type="password" id="confirmPassword" minlength="8" placeholder="Re-enter new password">
+      </div>
+      
+      <button class="btn-primary" id="changePasswordBtn">Change Password</button>
+      <div class="message" id="changePasswordMsg" style="display: none;"></div>
+      
+      <div class="info-box">
+        <strong>Note:</strong> Changing your master password does not change your recovery phrase. Keep your recovery phrase safe — it's still the only way to recover your account.
+      </div>
+    </div>
+    
+    <div class="card">
+      <h2>🔒 Account Security</h2>
+      <p>Check if your accounts have been compromised in known data breaches using Have I Been Pwned.</p>
+      
+      <button class="btn-primary" id="checkBreachesBtn">Check All Accounts for Breaches</button>
+      <div class="message" id="breachMsg" style="display: none;"></div>
+      
+      <div id="breachResults" style="margin-top: 16px; display: none;">
+        <div style="font-weight: 600; margin-bottom: 12px; color: #333;">Breach Report:</div>
+        <div id="breachList"></div>
+      </div>
+      
+      <div class="info-box">
+        <strong>Privacy:</strong> This feature uses the Have I Been Pwned API to check your email addresses. Only hashed versions of your emails are sent to protect your privacy.
+      </div>
+    </div>
+
+    <div class="card danger-zone">
+      <h2>⚠️ Danger Zone</h2>
+      <p style="color: #dc3545;">These actions are irreversible. Proceed with caution.</p>
+      
+      <button class="btn-danger" id="wipeDataBtn">Clear All Data</button>
+      <div class="message" id="wipeMsg" style="display: none;"></div>
+      
+      <div class="info-box" style="margin-top: 16px; background: #fff3cd; border-left-color: #ffc107;">
+        <strong>Warning:</strong> Clearing all data will permanently delete all saved passwords and sign you out. This action cannot be undone.
+      </div>
+    </div>
+  </div>
+  
+  <script type="module" src="options.js"></script>
+</body>
+</html>

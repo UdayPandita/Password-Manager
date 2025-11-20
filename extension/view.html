@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>All Passwords - LPH</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font: 14px/1.6 -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, system-ui;
+      margin: 0;
+      padding: 24px;
+      background: #f5f5f5;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .header {
+      background: #fff;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    h1 {
+      margin: 0;
+      font-size: 26px;
+      color: #333;
+    }
+    .search-input {
+      padding: 10px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      width: 300px;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: #007AFF;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: all 0.2s;
+    }
+    .card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 22px;
+      overflow: hidden;
+      position: relative;
+    }
+    .card-title {
+      flex: 1;
+      font-weight: 700;
+      font-size: 16px;
+      color: #333;
+    }
+    .credential-item {
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .credential-username {
+      font-weight: 600;
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 4px;
+    }
+    .credential-password {
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 8px;
+      word-break: break-all;
+    }
+    .credential-actions {
+      display: flex;
+      gap: 6px;
+    }
+    .credential-actions button {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      background: #fff;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+    .credential-actions button:hover {
+      background: #f0f0f0;
+    }
+    .btn-show {
+      color: #007AFF;
+    }
+    .btn-copy {
+      color: #28a745;
+    }
+    .btn-delete {
+      color: #dc3545;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button id="backBtn" style="padding: 8px 16px; background: #007AFF; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">← Back</button>
+        <h1>🔐 All Saved Passwords</h1>
+      </div>
+      <input type="text" class="search-input" id="searchInput" placeholder="Search...">
+    </div>
+    
+    <div id="emptyState" class="empty-state" style="display: none;">
+      <div class="empty-state-icon">📭</div>
+      <div style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No passwords found</div>
+      <div style="font-size: 14px; color: #666;">Start saving passwords to see them here</div>
+    </div>
+    
+    <div class="grid" id="grid"></div>
+  </div>
+  
+  <script type="module" src="view.js"></script>
+</body>
+</html>

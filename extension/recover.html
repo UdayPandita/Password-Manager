@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Recover Account - LPH</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font: 14px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui;
+      margin: 0;
+      padding: 32px;
+      background: #f5f5f5;
+    }
+
+    .container {
+      max-width: 580px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      margin: 0 0 16px 0;
+      font-size: 26px;
+      color: #007AFF;
+      text-align: center;
+    }
+
+    .warning {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 24px;
+      color: #856404;
+      font-size: 14px;
+    }
+
+    label {
+      display: block;
+      margin: 16px 0 8px 0;
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+
+    textarea, input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      min-height: 100px;
+      font-family: 'Courier New', monospace;
+      resize: vertical;
+    }
+
+    textarea:focus, input:focus {
+      outline: none;
+      border-color: #007AFF;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      background: #007AFF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 24px;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #0051D5;
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      text-align: center;
+      display: none;
+    }
+
+    .message.error {
+      background: #fee;
+      color: #c00;
+      border: 2px solid #fcc;
+    }
+
+    .message.success {
+      background: #efe;
+      color: #060;
+      border: 2px solid #cfc;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #007AFF;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔑 Recover Your Account</h1>
+
+    <div class="warning">
+      <strong>Account Recovery</strong><br>
+      Enter your 12-word recovery phrase and create a new master password.
+      Your saved passwords will remain securely encrypted and accessible.
+    </div>
+
+    <form id="recoverForm">
+      <label for="email">Email Address</label>
+      <input id="email" type="email" placeholder="your.email@example.com" required autocomplete="email">
+
+      <label for="mnemonic">Recovery Phrase (12 words)</label>
+      <textarea
+        id="mnemonic"
+        placeholder="word1 word2 word3 word4 word5 word6 word7 word8 word9 word10 word11 word12"
+        autocomplete="off"
+        spellcheck="false"
+        required
+      ></textarea>
+
+      <label for="newpw">New Master Password (min 8 characters)</label>
+      <input id="newpw" type="password" minlength="8" placeholder="Create a new master password" required>
+
+      <label for="confirm">Confirm New Password</label>
+      <input id="confirm" type="password" minlength="8" placeholder="Re-enter your new password" required>
+
+      <button type="submit">Recover Account</button>
+    </form>
+
+    <div class="message" id="msg"></div>
+
+    <a href="auth.html" class="back-link">← Back to Sign In</a>
+  </div>
+
+  <script type="module" src="recover.js"></script>
+</body>
+</html>
