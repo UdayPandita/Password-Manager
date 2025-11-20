@@ -1,0 +1,322 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Share Passwords - LPH</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui;
+      margin: 0;
+      padding: 20px;
+      width: 100%;
+      min-height: 100vh;
+      box-sizing: border-box;
+      background: #fff;
+      color: #333;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-section img {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+    }
+
+    .logo-section h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .back-btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      background: #fff;
+      color: #333;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      background: #f8f8f8;
+      border-color: #999;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .tab {
+      padding: 12px 24px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      color: #666;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      color: #007AFF;
+      border-bottom-color: #007AFF;
+    }
+
+    .tab:hover {
+      color: #333;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #333;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: #007AFF;
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #007AFF;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0051D5;
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .message {
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      display: none;
+      font-size: 13px;
+    }
+
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .shared-list {
+      margin-top: 20px;
+    }
+
+    .shared-item {
+      padding: 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      background: #fafafa;
+    }
+
+    .shared-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .shared-from {
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .shared-date {
+      font-size: 12px;
+      color: #999;
+    }
+
+    .shared-credential {
+      margin: 8px 0;
+      padding: 12px;
+      background: #fff;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .credential-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .credential-label {
+      font-size: 12px;
+      color: #666;
+      font-weight: 600;
+    }
+
+    .credential-value {
+      font-size: 13px;
+      color: #333;
+      font-family: 'Courier New', monospace;
+    }
+
+    .shared-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .btn-add {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-add:hover {
+      background: #218838;
+    }
+
+    .btn-show {
+      background: #6c757d;
+      color: white;
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .btn-show:hover {
+      background: #5a6268;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-section">
+      <img src="icons/logo.png" alt="LPH" onerror="this.style.display='none'">
+      <h1>Share Passwords</h1>
+    </div>
+    <button class="back-btn" id="backBtn">← Back</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="send">Send</button>
+    <button class="tab" data-tab="receive">Receive</button>
+  </div>
+
+  <!-- SEND TAB -->
+  <div class="tab-content active" id="sendTab">
+    <div class="message" id="sendMessage"></div>
+
+    <form id="sendForm">
+      <div class="form-group">
+        <label for="recipientEmail">Recipient Email</label>
+        <input 
+          type="email" 
+          id="recipientEmail" 
+          placeholder="user@example.com" 
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="passwordSelect">Select Password to Share</label>
+        <select id="passwordSelect" required>
+          <option value="">-- Select a password --</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="sendBtn">
+        Send Password
+      </button>
+    </form>
+  </div>
+
+  <!-- RECEIVE TAB -->
+  <div class="tab-content" id="receiveTab">
+    <div class="message" id="receiveMessage"></div>
+
+    <div class="shared-list" id="sharedList">
+      <div class="empty-state">
+        <div class="empty-state-icon">📭</div>
+        <div>Loading shared passwords...</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="share.js"></script>
+</body>
+</html>
