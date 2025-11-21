@@ -8,6 +8,8 @@ let session = {
   unlocked: false
 };
 
+// Promise that resolves once the background has attempted to restore session
+let restoreReady = null;
 const STORAGE_KEYS = {
   USER_EMAIL: 'pm_user_email',
   ENCRYPTED_KVAULT: 'pm_encrypted_kvault',
@@ -279,30 +281,16 @@ async function restoreSession() {
   if (stored[STORAGE_KEYS.USER_EMAIL]) {
     session.user = { email: stored[STORAGE_KEYS.USER_EMAIL] };
     
-    if (stored[STORAGE_KEYS.SESSION_STATE]?.unlocked) {
-      try {
-        const sessionState = stored[STORAGE_KEYS.SESSION_STATE];
-        const kVaultBytes = base64ToBytes(sessionState.kVaultExport);
-        
-        session.kVault = await crypto.subtle.importKey(
-          'raw',
-          kVaultBytes,
-          { name: 'AES-GCM', length: 256 },
-          true,
-          ['encrypt', 'decrypt']
-        );
-        
-        if (sessionState.saltBase64) {
-          session.salt = base64ToBytes(sessionState.saltBase64);
-        }
-        
-        session.unlocked = true;
-      } catch (e) {
-        console.error('Failed to restore session state:', e);
-        session.unlocked = false;
-        session.kVault = null;
-      }
-    }
+    // Don't restore unlocked state on browser restart - always start locked
+    // but keep user signed in so they just need to unlock with password
+    session.unlocked = false;
+    session.kVault = null;
+    session.salt = null;
+    
+    // Clear any persisted session state to avoid confusion
+    await chrome.storage.local.set({
+      [STORAGE_KEYS.SESSION_STATE]: null
+    });
     
     return true;
   }
@@ -1321,7 +1309,8 @@ function imageToImageData(img, w, h) {
   return ctx.getImageData(0, 0, w, h);
 }
 
-(async () => {
+// Start background initialization and keep a promise so message handlers can wait
+restoreReady = (async () => {
   await setActionIconIfAvailable();
   await restoreSession();
 })();
@@ -1329,7 +1318,9 @@ function imageToImageData(img, w, h) {
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   (async () => {
+    // Ensure background initialization (restoreSession etc.) completed before handling messages
     try {
+      await (restoreReady || Promise.resolve());
       switch (msg.type) {
         case 'PM_CHECK_EMAIL':
           try {
