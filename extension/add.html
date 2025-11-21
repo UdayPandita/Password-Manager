@@ -47,6 +47,18 @@
       outline: none;
       border-color: #007AFF;
     }
+    input.invalid {
+      border-color: #FF3B30;
+    }
+    .error-message {
+      color: #FF3B30;
+      font-size: 12px;
+      margin-top: 4px;
+      display: none;
+    }
+    .error-message.show {
+      display: block;
+    }
     .button-group {
       display: flex;
       gap: 12px;
@@ -97,6 +109,7 @@
           required
           autocomplete="off"
         >
+        <div class="error-message" id="websiteError">Please enter a valid URL or domain name</div>
       </div>
       
       <div class="form-group">
